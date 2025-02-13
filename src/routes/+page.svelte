@@ -75,24 +75,21 @@
     height = window.innerHeight;
     width = window.innerWidth;
 
-    const xExtent = extent(chunks, (d: Chunk): number => d.reduced[0]) as [number, number];
-    const yExtent = extent(chunks, (d: Chunk): number => d.reduced[1]) as [number, number];
+    const xExtent = extent(chunks, (d: Chunk): number => d.reduced[0]) as [
+      number,
+      number,
+    ];
+    const yExtent = extent(chunks, (d: Chunk): number => d.reduced[1]) as [
+      number,
+      number,
+    ];
     g = scaleLinear()
       .domain(xExtent ? xExtent : [0, 1])
       .range([50, 255])
       .nice();
-    r = scaleLinear()
-      .domain(yExtent)
-      .range([50, 255])
-      .nice();
-    x = scaleLinear()
-      .domain(xExtent)
-      .range([0, width])
-      .nice();
-    y = scaleLinear()
-      .domain(yExtent)
-      .range([0, height])
-      .nice();
+    r = scaleLinear().domain(yExtent).range([50, 255]).nice();
+    x = scaleLinear().domain(xExtent).range([0, width]).nice();
+    y = scaleLinear().domain(yExtent).range([0, height]).nice();
     current = first[0];
   });
 </script>
@@ -101,6 +98,17 @@
   <div class="card">
     <header>
       <h1>Leaves of Grasstok</h1>
+      <p>Poems by <em>Walt Whitman</em></p>
+      <p>
+        Images from <a href="https://www.loc.gov/pictures/collection/fsa/"
+          >the FSA/OWI collection</a
+        > at the Library of Congress.
+      </p>
+      <p>
+        Engineering by <a href="https://bsky.app/profile/johnwest.bsky.social"
+          >John West</a
+        >
+      </p>
     </header>
     {#if current}
       <div class="image">
@@ -126,6 +134,16 @@
 </div>
 
 <style>
+  .card {
+    background-color: rgba(255, 255, 255, 0.75);
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width: 500px;
+    padding: calc(var(--unit) * 0.5);
+    position: relative;
+    width: 100%;
+    z-index: 10;
+  }
   .card header {
     background-color: black;
     color: white;
@@ -133,24 +151,14 @@
     padding: calc(var(--unit) * 0.25) var(--unit);
   }
   .card header h1 {
-    font-size: calc(var(--unit) * 1.5);
-    font-weight: 100;
-    text-transform: uppercase;
-    transform: scaleX(75%);
+    font-size: calc(var(--unit) * 2);
+    font-weight: 900;
+    transform: scaleX(60%);
     transform-origin: 0 0;
+    width: 125%;
   }
-  .card {
-    background-color: rgba(255, 255, 255, 0.75);
-    border: 0.5px solid black;
-    box-sizing: border-box;
-    margin: calc(var(--unit) * 2) auto;
-    padding: calc(var(--unit) * 0.5);
-    position: relative;
-    width: 500px;
-    z-index: 10;
-  }
-  .card h1 {
-    font-size: calc(var(--unit) * 0.6);
+  .card .meta h1 {
+    font-size: calc(var(--unit) * 0.8);
   }
   .card .image img {
     display: block;
@@ -172,7 +180,11 @@
     width: 100%;
   }
   .card p {
-    font-size: calc(var(--unit) * 0.8);
-    line-height: calc(var(--unit) * 0.8 * 1.5);
+    font-size: calc(var(--unit) * 0.75);
+    line-height: calc(var(--unit) * 0.75 * 1.5);
+  }
+  .card p a {
+    color: white;
+    font-style: italic;
   }
 </style>
