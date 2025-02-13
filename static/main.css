@@ -1,0 +1,10 @@
+:root {
+    --font: "Times New Roman";
+    --unit: 20px;
+}
+
+* {
+    font-family: var(--font);
+    margin: 0;
+    padding: 0;
+}
