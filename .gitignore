@@ -12,7 +12,6 @@
 .wrangler
 build
 node_modules
-static/*.jpg
 Thumbs.db
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
