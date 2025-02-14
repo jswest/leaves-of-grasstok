@@ -52,8 +52,8 @@
     margin-top: var(--unit);
   }
   .Card .image {
-    height: 500px;
-    width: 500px;
+    height: auto;
+    width: 100%;
   }
   .Card .meta h1 {
     font-size: calc(var(--unit));

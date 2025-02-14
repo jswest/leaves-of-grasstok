@@ -84,7 +84,7 @@
   .Image {
     border: 1px solid white;
     box-sizing: border-box;
-    height: 500px;
-    width: 500px;
+    height: auto;
+    width: 100%;
   }
 </style>

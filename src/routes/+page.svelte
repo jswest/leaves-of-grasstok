@@ -105,10 +105,12 @@
 </script>
 
 <div class="Page" style="background-color: rgb({tint[0]},{tint[1]},{tint[2]})">
-  <Header />
-  {#if current}
-    <Card chunk={current} {handleNext} {tint} />
-  {/if}
+  <div class="guts">
+    <Header />
+    {#if current}
+      <Card chunk={current} {handleNext} {tint} />
+    {/if}
+  </div>
 </div>
 
 <style>
@@ -119,6 +121,12 @@
     position: fixed;
     top: 0;
     width: 100vw;
+  }
+  .Page .guts {
+    box-sizing: border-box;
+    max-width: 500px;
+    padding: calc(var(--unit) * 0.5);
+    width: 100%;
   }
   :global(button) {
     background-color: transparent;
