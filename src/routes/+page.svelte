@@ -1,10 +1,13 @@
 <script lang="ts">
   import { extent, scaleLinear } from "d3";
+  import type { ScaleLinear } from "d3";
   import { onMount } from "svelte";
 
   import { average, distance } from "$lib/util";
   import type { Chunk } from "$lib/util";
 
+  import Card from "$lib/components/Card.svelte";
+  import Header from "$lib/components/Header.svelte";
   import data from "$lib/data.json";
 
   const chunks: Chunk[] = [];
@@ -28,20 +31,21 @@
   }
 
   let current: Chunk | null = $state(null);
-  let height = $state(0);
+  let height: number = $state(0);
   let history: Chunk[] = $state([]);
   let first: Chunk[] = $state([
     chunks[Math.floor(Math.random() * chunks.length)],
     chunks[Math.floor(Math.random() * chunks.length)],
     chunks[Math.floor(Math.random() * chunks.length)],
   ]);
-  let g = $state();
-  let r = $state();
-  let timestampBegin = $state(0);
-  let timestampEnd = $state(0);
-  let x = $state();
-  let y = $state();
-  let width = $state(0);
+  let g: ScaleLinear<number, number> = $state(scaleLinear());
+  let r: ScaleLinear<number, number> = $state(scaleLinear());
+  let timestampBegin: number = $state(0);
+  let timestampEnd: number = $state(0);
+  let tint: number[] = $state([50, 50, 50]);
+  let x: ScaleLinear<number, number> = $state(scaleLinear());
+  let y: ScaleLinear<number, number> = $state(scaleLinear());
+  let width: number = $state(0);
 
   const handleNext = () => {
     if (current) {
@@ -85,106 +89,47 @@
     ];
     g = scaleLinear()
       .domain(xExtent ? xExtent : [0, 1])
-      .range([50, 255])
+      .range([50, 150])
       .nice();
-    r = scaleLinear().domain(yExtent).range([50, 255]).nice();
+    r = scaleLinear().domain(yExtent).range([50, 150]).nice();
     x = scaleLinear().domain(xExtent).range([0, width]).nice();
     y = scaleLinear().domain(yExtent).range([0, height]).nice();
     current = first[0];
   });
+
+  $effect(() => {
+    if (current) {
+      tint = [r(current.reduced[1]), g(current.reduced[0]), 50];
+    }
+  });
 </script>
 
-<div class="Page">
-  <div class="card">
-    <header>
-      <h1>Leaves of Grasstok</h1>
-      <p>Poems by <em>Walt Whitman</em></p>
-      <p>
-        Images from <a href="https://www.loc.gov/pictures/collection/fsa/"
-          >the FSA/OWI collection</a
-        > at the Library of Congress.
-      </p>
-      <p>
-        Engineering by <a href="https://bsky.app/profile/johnwest.bsky.social"
-          >John West</a
-        >
-      </p>
-    </header>
-    {#if current}
-      <div class="image">
-        {#if current.image}
-          <!-- svelte-ignore a11y_missing_attribute -->
-          <img src="image-{current.image}" width="70%" />
-        {/if}
-      </div>
-      {#each current.body.split("\n") as line}
-        <p>{line}</p>
-      {/each}
-      <div class="meta">
-        {#if current.title}
-          <h1><em>From</em> &ldquo;{current.title}&rdquo;</h1>
-        {/if}
-        {#if current.book}
-          <h1>{current.book} of <em>Leaves of Grass</em></h1>
-        {/if}
-      </div>
-    {/if}
-    <button class="next" onclick={handleNext}> Next.</button>
-  </div>
+<div class="Page" style="background-color: rgb({tint[0]},{tint[1]},{tint[2]})">
+  <Header />
+  {#if current}
+    <Card chunk={current} {handleNext} {tint} />
+  {/if}
 </div>
 
 <style>
-  .card {
-    background-color: rgba(255, 255, 255, 0.75);
-    box-sizing: border-box;
-    margin: 0 auto;
-    max-width: 500px;
-    padding: calc(var(--unit) * 0.5);
-    position: relative;
-    width: 100%;
-    z-index: 10;
+  .Page {
+    height: 100vh;
+    left: 0;
+    overflow: scroll;
+    position: fixed;
+    top: 0;
+    width: 100vw;
   }
-  .card header {
-    background-color: black;
-    color: white;
-    margin-bottom: calc(var(--unit));
-    padding: calc(var(--unit) * 0.25) var(--unit);
-  }
-  .card header h1 {
-    font-size: calc(var(--unit) * 2);
-    font-weight: 900;
-    transform: scaleX(60%);
-    transform-origin: 0 0;
-    width: 125%;
-  }
-  .card .meta h1 {
-    font-size: calc(var(--unit) * 0.8);
-  }
-  .card .image img {
-    display: block;
-    margin: 0 auto var(--unit) auto;
-  }
-  .card .meta {
-    margin-top: calc(var(--unit));
-  }
-  .card .next {
-    background-color: black;
-    border: none;
+  :global(button) {
+    background-color: transparent;
+    border: 1px solid white;
     border-radius: none;
     color: white;
     cursor: pointer;
     display: block;
-    font-size: calc(var(--unit) * 0.8);
+    font-size: calc(var(--unit));
     margin-top: calc(var(--unit));
     padding: calc(var(--unit) * 0.1) 0;
     width: 100%;
-  }
-  .card p {
-    font-size: calc(var(--unit) * 0.75);
-    line-height: calc(var(--unit) * 0.75 * 1.5);
-  }
-  .card p a {
-    color: white;
-    font-style: italic;
   }
 </style>
