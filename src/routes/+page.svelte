@@ -124,6 +124,7 @@
   }
   .Page .guts {
     box-sizing: border-box;
+    margin: 0 auto;
     max-width: 500px;
     padding: calc(var(--unit) * 0.5);
     width: 100%;
