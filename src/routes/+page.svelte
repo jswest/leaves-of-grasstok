@@ -118,6 +118,7 @@
     height: 100vh;
     left: 0;
     overflow: scroll;
+    padding-bottom: calc(var(--unit) * 4);
     position: fixed;
     top: 0;
     width: 100vw;
