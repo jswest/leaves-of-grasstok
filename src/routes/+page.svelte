@@ -115,11 +115,11 @@
 
 <style>
   .Page {
-    height: 100vh;
     left: 0;
+    min-height: 100vh;
     overflow: scroll;
     padding-bottom: calc(var(--unit) * 4);
-    position: fixed;
+    position: relative;
     top: 0;
     width: 100vw;
   }
